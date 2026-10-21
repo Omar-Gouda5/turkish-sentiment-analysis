@@ -1,28 +1,27 @@
 # DistilBERT ile Türkçe Duygu Analizi
 
-Hitit Üniversitesi Doğal Dil İşleme dersi için hazırlanan üç sınıflı Türkçe duygu analizi projesi. Model: `distilbert/distilbert-base-multilingual-cased`. Sınıflar: **Negative**, **Notr**, **Positive**.
-
-## Çalıştırma
-`Turkish_Sentiment_Analysis.ipynb` dosyasını Google Colab ile açın, varsa T4 GPU seçin ve hücreleri sırayla çalıştırın. Kullanılan paket sürümü: `transformers==4.46.3`.
-
-## Veri
-[winvoker/turkish-sentiment-analysis-dataset](https://huggingface.co/datasets/winvoker/turkish-sentiment-analysis-dataset). Eğitim bölümünden her sınıftan 2.000 örnek alınarak 4.800 eğitim ve 1.200 doğrulama örneği hazırlanmıştır. Bağımsız test bölümünden tabakalı olarak 3.000 örnek değerlendirilmiştir. Random seed: 42.
-
-## Eğitim
-3 epoch, learning rate 2e-5, batch size 8, max length 128, FP16 (GPU varsa), doğrulama macro F1'e göre en iyi checkpoint.
-
-## Sonuçlar
-Orijinal Colab çalıştırmasında **test accuracy %89,87** ve **macro F1 %85,05** elde edilmiştir. Negatif sınıfın F1 skoru %65,89'dur. Eğitim kaybı azalırken üçüncü epochta doğrulama kaybı artmış, olası overfitting gözlenmiştir. Ayrıntılar: `results/experiment_summary.md`.
+Hitit Üniversitesi Doğal Dil İşleme dersi için hazırlanmış Türkçe duygu analizi projesi. **Negative**, **Notr**, **Positive** olmak üzere üç sınıf vardır.
 
 ## Dosyalar
-- `Turkish_Sentiment_Analysis.ipynb`: eğitim, test, grafikler ve tahminler
-- `results/experiment_summary.md`: orijinal test ölçümleri
-- `Turkce_Duygu_Analizi_Proje_Raporu.docx`: öğrenci numarası çıkarılmış rapor (ayrı dosya olarak eklenecek)
-- `results/training_loss.png`, `results/confusion_matrix.png`: orijinal görseller (ayrı dosyalar olarak eklenecek)
+- [Google Colab notebook](Turkish_Sentiment_Analysis.ipynb) — veri hazırlama, modelin ince ayarı, değerlendirme ve örnek tahminler
+- [Türkçe proje raporu](Turkce_Duygu_Analizi_Proje_Raporu.md) — öğrenci numarası çıkarılmış, GitHub'da doğrudan okunabilen sürüm
+- [Eğitim kaybı grafiği](results/training_loss.svg) — rapordaki yaklaşık/yuvarlatılmış değerlerden yeniden çizilmiş görselleştirme
+- [Karışıklık matrisi](results/confusion_matrix.svg) — orijinal test sayılarından yeniden çizilmiş görselleştirme
+- [Deney özeti](results/experiment_summary.md) — orijinal Colab deneyinden alınan ölçümler
 
-**Not:** Model ağırlıkları boyut nedeniyle GitHub'a yüklenmez. Notebook tekrar çalıştırılarak model yeniden üretilebilir. Rapor ve görseller yüklenene kadar depodaki metrik özeti referans alınmalıdır.
+## Veri ve eğitim
+Kaynak: [winvoker/turkish-sentiment-analysis-dataset](https://huggingface.co/datasets/winvoker/turkish-sentiment-analysis-dataset).
+Her sınıftan 2.000 örnek seçilmiştir: 4.800 eğitim, 1.200 doğrulama. Ayrı test bölümünden sınıf oranları korunarak 3.000 örnek alınmıştır.
+Model: [multilingual DistilBERT](https://huggingface.co/distilbert/distilbert-base-multilingual-cased); 3 epoch, learning rate `2e-5`, batch size `8`, maksimum uzunluk 128, seed 42. En iyi checkpoint doğrulama macro F1'e göre seçilmiştir.
 
-## Kaynaklar
-- https://huggingface.co/datasets/winvoker/turkish-sentiment-analysis-dataset
-- https://huggingface.co/distilbert/distilbert-base-multilingual-cased
-- Sanh et al. (2019), DistilBERT, arXiv:1910.01108.
+## Sonuçlar
+**Test Accuracy: %89,87** · **Macro F1: %85,05** · **Weighted F1: %90,51**.
+
+Negatif sınıfın F1 skoru %65,89'dur. Üçüncü epochta doğrulama kaybının artması olası overfitting'e işaret eder.
+
+## Çalıştırma
+1. `Turkish_Sentiment_Analysis.ipynb` dosyasını Google Colab'de açın.
+2. Mümkünse GPU seçin ve hücreleri sırayla çalıştırın.
+3. Kurulum hücresindeki `transformers==4.46.3` sürümü, Colab ortamıyla uyumlu olduğu doğrulanan sürümdür. Paket kurulumundan sonra Colab yeniden başlatma isterse hücreleri tekrar sırayla çalıştırın.
+
+**Not:** Eğitilmiş model ağırlıkları GitHub'a yüklenmemiştir. Notebook modeli yeniden eğitip `final_model/` klasörüne kaydeder. Raporun orijinal Word kopyası öğrenci numarası çıkarılmış olarak ayrıca saklanmıştır; GitHub'da görüntülenen sürüm Markdown biçimindedir.
