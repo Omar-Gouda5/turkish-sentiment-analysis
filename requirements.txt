@@ -1,0 +1,7 @@
+transformers==4.46.3
+accelerate>=0.26.0
+datasets
+scikit-learn
+pandas
+matplotlib
+numpy
