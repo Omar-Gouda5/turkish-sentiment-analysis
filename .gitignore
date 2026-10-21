@@ -1,0 +1,9 @@
+final_model/
+turkish_sentiment_model/
+*.safetensors
+*.bin
+*.pt
+*.pth
+__pycache__/
+.ipynb_checkpoints/
+.env
