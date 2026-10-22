@@ -1,27 +1,64 @@
-# DistilBERT ile Türkçe Duygu Analizi
+# Turkish Sentiment Analysis with Multilingual DistilBERT
 
-Hitit Üniversitesi Doğal Dil İşleme dersi için hazırlanmış Türkçe duygu analizi projesi. **Negative**, **Notr**, **Positive** olmak üzere üç sınıf vardır.
+Three-class sentiment classification for Turkish text, developed for a Natural Language Processing course at Hitit University by Omar Gouda.
 
-## Dosyalar
-- [Google Colab notebook](Turkish_Sentiment_Analysis.ipynb) — veri hazırlama, modelin ince ayarı, değerlendirme ve örnek tahminler
-- [Türkçe proje raporu](Turkce_Duygu_Analizi_Proje_Raporu.md) — öğrenci numarası çıkarılmış, GitHub'da doğrudan okunabilen sürüm
-- [Eğitim kaybı grafiği](results/training_loss.svg) — rapordaki yaklaşık/yuvarlatılmış değerlerden yeniden çizilmiş görselleştirme
-- [Karışıklık matrisi](results/confusion_matrix.svg) — orijinal test sayılarından yeniden çizilmiş görselleştirme
-- [Deney özeti](results/experiment_summary.md) — orijinal Colab deneyinden alınan ölçümler
+**Task:** classify text as Negative, Neutral (`Notr`) or Positive.
 
-## Veri ve eğitim
-Kaynak: [winvoker/turkish-sentiment-analysis-dataset](https://huggingface.co/datasets/winvoker/turkish-sentiment-analysis-dataset).
-Her sınıftan 2.000 örnek seçilmiştir: 4.800 eğitim, 1.200 doğrulama. Ayrı test bölümünden sınıf oranları korunarak 3.000 örnek alınmıştır.
-Model: [multilingual DistilBERT](https://huggingface.co/distilbert/distilbert-base-multilingual-cased); 3 epoch, learning rate `2e-5`, batch size `8`, maksimum uzunluk 128, seed 42. En iyi checkpoint doğrulama macro F1'e göre seçilmiştir.
+## Approach
 
-## Sonuçlar
-**Test Accuracy: %89,87** · **Macro F1: %85,05** · **Weighted F1: %90,51**.
+1. Load the [Turkish sentiment dataset](https://huggingface.co/datasets/winvoker/turkish-sentiment-analysis-dataset).
+2. Sample 2,000 examples per class from its training partition.
+3. Split those 6,000 examples into 4,800 training and 1,200 validation examples, stratified by label.
+4. Fine-tune [multilingual DistilBERT](https://huggingface.co/distilbert/distilbert-base-multilingual-cased), selecting the checkpoint with the best validation macro F1.
+5. Evaluate on a stratified sample of 3,000 examples from the dataset's separate test partition.
 
-Negatif sınıfın F1 skoru %65,89'dur. Üçüncü epochta doğrulama kaybının artması olası overfitting'e işaret eder.
+## Reported experiment
 
-## Çalıştırma
-1. `Turkish_Sentiment_Analysis.ipynb` dosyasını Google Colab'de açın.
-2. Mümkünse GPU seçin ve hücreleri sırayla çalıştırın.
-3. Kurulum hücresindeki `transformers==4.46.3` sürümü, Colab ortamıyla uyumlu olduğu doğrulanan sürümdür. Paket kurulumundan sonra Colab yeniden başlatma isterse hücreleri tekrar sırayla çalıştırın.
+| Metric | Reported value |
+|---|---:|
+| Accuracy | 89.87% |
+| Macro F1 | 85.05% |
+| Weighted F1 | 90.51% |
+| Negative-class F1 | 65.89% |
 
-**Not:** Eğitilmiş model ağırlıkları GitHub'a yüklenmemiştir. Notebook modeli yeniden eğitip `final_model/` klasörüne kaydeder. Raporun orijinal Word kopyası öğrenci numarası çıkarılmış olarak ayrıca saklanmıştır; GitHub'da görüntülenen sürüm Markdown biçimindedir.
+These are results recorded from the original Colab experiment, not a new training run performed during repository cleanup. The notebook is distributed without saved execution outputs or trained weights. Results can vary when rerun.
+
+### Training configuration
+
+| Parameter | Value |
+|---|---|
+| Epochs | 3 |
+| Learning rate | 2e-5 |
+| Training batch size | 8 |
+| Maximum sequence length | 128 tokens |
+| Split / trainer seed | 42 |
+| Checkpoint selection | Validation macro F1 |
+
+## Run in Google Colab
+
+[Open the notebook in Colab](https://colab.research.google.com/github/nanafi23/turkish-sentiment-analysis/blob/main/Turkish_Sentiment_Analysis.ipynb)
+
+1. Select a GPU runtime when available.
+2. Run the notebook cells in order, including dependency installation. Restart the runtime if the environment requests it.
+3. Allow access to Hugging Face to download the dataset and base model.
+4. Training writes the model to `final_model/` and evaluation outputs to `results/`.
+
+The tested historical setup used `transformers==4.46.3`. Other dependencies are listed in `requirements.txt`; the environment is not fully locked. Colab supplies PyTorch; a local notebook environment also requires a compatible PyTorch installation and Jupyter.
+
+## Repository guide
+
+| File | Purpose |
+|---|---|
+| [Notebook](Turkish_Sentiment_Analysis.ipynb) | Data preparation, fine-tuning, evaluation and sample predictions |
+| [Turkish report](Turkce_Duygu_Analizi_Proje_Raporu.md) | Academic write-up |
+| [Experiment summary](results/experiment_summary.md) | Recorded original metrics |
+| [Confusion matrix](results/confusion_matrix.svg) | Reconstructed from the original test counts |
+| [Loss chart](results/training_loss.svg) | Reconstructed from approximate, rounded report values |
+
+## Limitations
+
+- Lower negative-class F1 highlights uneven performance across classes; accuracy alone does not describe model quality.
+- Increased validation loss in the third epoch suggests possible overfitting.
+- Sampling and hardware/library differences can affect reproducibility. There is no fresh end-to-end reproduction in this cleanup.
+- This is a course experiment, not a deployed sentiment service or a claim of state-of-the-art performance.
+- Dataset and base-model terms remain those of their respective publishers.
