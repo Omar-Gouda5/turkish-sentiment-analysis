@@ -62,3 +62,7 @@ The tested historical setup used `transformers==4.46.3`. Other dependencies are 
 - Sampling and hardware/library differences can affect reproducibility. There is no fresh end-to-end reproduction in this cleanup.
 - This is a course experiment, not a deployed sentiment service or a claim of state-of-the-art performance.
 - Dataset and base-model terms remain those of their respective publishers.
+
+## More projects
+
+See [Omar Gouda's selected engineering and AI projects](PORTFOLIO.md) for the curated portfolio and each project's validated scope.
