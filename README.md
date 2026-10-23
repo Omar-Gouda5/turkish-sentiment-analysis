@@ -36,7 +36,7 @@ These are results recorded from the original Colab experiment, not a new trainin
 
 ## Run in Google Colab
 
-[Open the notebook in Colab](https://colab.research.google.com/github/nanafi23/turkish-sentiment-analysis/blob/main/Turkish_Sentiment_Analysis.ipynb)
+[Open the notebook in Colab](https://colab.research.google.com/github/Omar-Gouda5/turkish-sentiment-analysis/blob/main/Turkish_Sentiment_Analysis.ipynb)
 
 1. Select a GPU runtime when available.
 2. Run the notebook cells in order, including dependency installation. Restart the runtime if the environment requests it.
